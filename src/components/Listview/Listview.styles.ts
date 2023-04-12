@@ -15,6 +15,12 @@ export const TodoListContainer = styled.div`
     flex-direction: column;
 `
 
+export const TodoListItemContainer = styled.div`
+    display:flex;
+    align-items: center;
+    gap: 5px;
+`
+
 export const TodoListItem = styled.label`
     display: flex;
     padding: 0.5rem 0;
