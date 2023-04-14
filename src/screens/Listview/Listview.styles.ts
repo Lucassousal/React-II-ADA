@@ -1,3 +1,4 @@
+import { colors } from './../../styles';
 import styled from "styled-components";
 
 export const ListContainer = styled.div`
@@ -25,7 +26,8 @@ export const TodoListItem = styled.label<ITodoListItemProps>`
   align-items: center;
   font-size: 1.2rem;
   text-decoration: ${(props) => (props.isComplete ? "line-through" : "none")};
-  text-decoration-color: blue;
+  text-decoration-color: black;
+  color: ${(props) => (props.isComplete ? "#bbb" : "#fff")}
 `;
 
 export const Input = styled.input`
