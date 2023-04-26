@@ -3,8 +3,10 @@ import { ITaks } from "pages/Listview/types/List.types"
 import * as C from "./List.styles"
 
 import { Task } from "pages/Listview/components/Task/Task"
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction} from "react"
 import { TasksStatus } from "../TasksStatus/TasksStatus"
+import { SearchTerm } from "../SearchTerm/SearchTerm"
+import { useTask } from "context/task.contex"
 
 type ListProps = {
   tasks:ITaks[],
@@ -14,7 +16,7 @@ type ListProps = {
 
 export const List = ({tasks, setTasks, setLocalTasks}:ListProps) => {
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const {tasksFilter} = useTask();
 
   const handleDeleteTask = (id : string) => {
     if(id !== ''){
@@ -29,38 +31,31 @@ export const List = ({tasks, setTasks, setLocalTasks}:ListProps) => {
   }
 
   const handleCheckedStatus = (id:string) => {
+  
     const findedIndexTask = tasks.findIndex( item => item.id === id)
 
-    if(findedIndexTask > 0){
+    if(findedIndexTask > -1){
       let copyTasks = [...tasks];
       copyTasks[findedIndexTask].isComplete = !copyTasks[findedIndexTask].isComplete
 
+      setTasks(copyTasks)
       setLocalTasks(copyTasks)
     }
   }
 
-  const handleSearchValue = (e:ChangeEvent<HTMLInputElement>) => {
-    const searchValue = e.target.value;
-    setSearchTerm(searchValue)
-  }
-
-
   return (
     <>
       <C.ListContainer>
-        <TasksStatus tasks={tasks} />
 
         { tasks.length > 0 && 
-          <C.SearchInput 
-            value={searchTerm}  
-            onChange={handleSearchValue}
-            placeholder="Digite o nome da tarefa que você quer pesquisar"
-          />
+          <>
+            <TasksStatus/>
+            <SearchTerm/>
+          </>
         }
         {
           tasks.length > 0 ?
-            tasks.filter((eachTask) => eachTask.label.includes(searchTerm))
-              .map((element)=> {
+          tasksFilter.map((element)=> {
                 return(
                   <Task 
                     key={element.id} 
