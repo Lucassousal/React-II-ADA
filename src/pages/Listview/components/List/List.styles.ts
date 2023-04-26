@@ -11,6 +11,7 @@ export const ListContainer = styled.div`
   margin-top:160px;
   margin-bottom:80px;
   gap:8px;
+  position:relative;
 `;
 
 export const ListEmpty = styled.div`

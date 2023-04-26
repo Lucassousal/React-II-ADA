@@ -4,6 +4,7 @@ import * as C from "./List.styles"
 
 import { Task } from "pages/Listview/components/Task/Task"
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react"
+import { TasksStatus } from "../TasksStatus/TasksStatus"
 
 type ListProps = {
   tasks:ITaks[],
@@ -28,11 +29,13 @@ export const List = ({tasks, setTasks, setLocalTasks}:ListProps) => {
   }
 
   const handleCheckedStatus = (id:string) => {
-    const findedTask = tasks.find(item => item.id === id)
-    if(findedTask){
-      findedTask.isComplete = !findedTask?.isComplete
+    const findedIndexTask = tasks.findIndex( item => item.id === id)
 
-      setLocalTasks(tasks)
+    if(findedIndexTask > 0){
+      let copyTasks = [...tasks];
+      copyTasks[findedIndexTask].isComplete = !copyTasks[findedIndexTask].isComplete
+
+      setLocalTasks(copyTasks)
     }
   }
 
@@ -43,32 +46,36 @@ export const List = ({tasks, setTasks, setLocalTasks}:ListProps) => {
 
 
   return (
-    <C.ListContainer>
-      { tasks.length > 0 && 
-        <C.SearchInput 
-          value={searchTerm}  
-          onChange={handleSearchValue}
-          placeholder="Digite o nome da tarefa que você quer pesquisar"
-        />
-      }
-      {
-        tasks.length > 0 ?
-          tasks.filter((eachTask) => eachTask.label.includes(searchTerm))
-            .map((element)=> {
-              return(
-                <Task 
-                  key={element.id} 
-                  id={element.id} 
-                  label={element.label} 
-                  isComplete={element.isComplete}
-                  deleteTask = {handleDeleteTask}
-                  changeChecked = {handleCheckedStatus}
-                />
-              )
-            })
-        :
-          <C.ListEmpty>Não há item na sua lista</C.ListEmpty>
-      }
-    </C.ListContainer>
+    <>
+      <C.ListContainer>
+        <TasksStatus tasks={tasks} />
+
+        { tasks.length > 0 && 
+          <C.SearchInput 
+            value={searchTerm}  
+            onChange={handleSearchValue}
+            placeholder="Digite o nome da tarefa que você quer pesquisar"
+          />
+        }
+        {
+          tasks.length > 0 ?
+            tasks.filter((eachTask) => eachTask.label.includes(searchTerm))
+              .map((element)=> {
+                return(
+                  <Task 
+                    key={element.id} 
+                    id={element.id} 
+                    label={element.label} 
+                    isComplete={element.isComplete}
+                    deleteTask = {handleDeleteTask}
+                    changeChecked = {handleCheckedStatus}
+                  />
+                )
+              })
+          :
+            <C.ListEmpty>Não há item na sua lista</C.ListEmpty>
+        }
+      </C.ListContainer>
+    </>
   )
 }
