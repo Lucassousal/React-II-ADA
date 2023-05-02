@@ -1,6 +1,8 @@
 import { nanoid } from "nanoid";
 import { ITaks } from "pages/Listview/types/List.types"
-import { ChangeEvent, createContext, useContext, useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, createContext, useContext, useEffect, useState } from "react";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface ITaskContext{
   tasks: ITaks[];
@@ -13,6 +15,7 @@ interface ITaskContext{
   setInputValue:React.Dispatch<React.SetStateAction<string>>;
   setLocalTasks:(newTasks: ITaks[]) => void;
   handleChangeInput:(e: ChangeEvent<HTMLInputElement>) => void,
+  handleNewTaskKeyPress:(e: KeyboardEvent<HTMLInputElement>) => void,
 }
 
 const TaskContext = createContext<ITaskContext>({} as ITaskContext)
@@ -47,11 +50,18 @@ const TaskProvider = ({children}:IProps) => {
         setLocalTasks(newTasks)
 
       }else{
-        alert('essa task já existe')
+        toast.error('Essa tarefa já existe', {position:toast.POSITION.TOP_RIGHT});
       }
 
     }else{
-      alert('Preencha uma tarefa antes de adicionar')
+      toast.error('Preencha uma tarefa antes de adicionar', {position:toast.POSITION.TOP_RIGHT});
+    }
+  }
+
+  const handleNewTaskKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && inputValue !== "") {
+      handleAddTask(inputValue);
+      setInputValue("");
     }
   }
 
@@ -95,6 +105,7 @@ const TaskProvider = ({children}:IProps) => {
           inputValue,
           setInputValue,
           handleChangeInput,
+          handleNewTaskKeyPress,
         }}>
       {children}
     </TaskContext.Provider>

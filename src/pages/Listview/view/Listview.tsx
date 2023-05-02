@@ -4,15 +4,18 @@ import * as C from './Listview.styles'
 
 import { useTask } from 'context/task.contex'
 
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-export const ListView = () => {
 
-  const {tasks, setTasks, inputValue, handleAddTask,setLocalTasks, handleChangeInput} = useTask()
+const ListView = () => {
+
+  const {tasks, setTasks, inputValue, handleAddTask, setLocalTasks, handleChangeInput, handleNewTaskKeyPress} = useTask()
 
   return(
     <C.ListContainer>
       <C.InputContainer>
-        <C.Input value={inputValue} onChange={handleChangeInput} placeholder='Digite a sua nova tarefa'/>
+        <C.Input value={inputValue} onChange={handleChangeInput} onKeyPress={handleNewTaskKeyPress} placeholder='Digite a sua nova tarefa'/>
         <C.Button onClick={() => handleAddTask(inputValue)}>+</C.Button>
       </C.InputContainer>
       <List 
@@ -20,6 +23,9 @@ export const ListView = () => {
         setTasks = {setTasks}
         setLocalTasks = {setLocalTasks}
       />
+    <ToastContainer/>
     </C.ListContainer>
   )
 }
+
+export default ListView
