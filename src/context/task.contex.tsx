@@ -49,6 +49,8 @@ const TaskProvider = ({children}:IProps) => {
         setInputValue('')
         setLocalTasks(newTasks)
 
+        toast.success('Tarefa adicionada', {position:toast.POSITION.TOP_RIGHT});
+
       }else{
         toast.error('Essa tarefa já existe', {position:toast.POSITION.TOP_RIGHT});
       }
